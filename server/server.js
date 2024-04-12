@@ -53,11 +53,11 @@ app.post("/login", async function (request, response) {
     [username]
   );
 
-  const storedHashedPassword = result.rows[0].password;
-  const isMatch = await bcrypt.compare(password, storedHashedPassword);
   if (result.rows.length === 0) {
     console.log("no user exists");
   } else {
+    const storedHashedPassword = result.rows[0].password;
+    const isMatch = await bcrypt.compare(password, storedHashedPassword);
     if (isMatch) {
       console.log("You have logged in");
     } else {
