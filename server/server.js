@@ -37,11 +37,10 @@ app.post("/sign-up", async function (request, response) {
       "INSERT INTO username_password (username, password) VALUES ($1, $2)",
       [username, hashedPassword]
     );
+    response.json({ message: "" });
   } catch (error) {
-    console.log("Username already exists");
+    response.json({ message: "Username already exists" });
   }
-
-  response.json("uploaded");
 });
 
 app.post("/login", async function (request, response) {
@@ -54,18 +53,16 @@ app.post("/login", async function (request, response) {
   );
 
   if (result.rows.length === 0) {
-    console.log("no user exists");
+    response.json({ message: "No user exists" });
   } else {
     const storedHashedPassword = result.rows[0].password;
     const isMatch = await bcrypt.compare(password, storedHashedPassword);
     if (isMatch) {
-      console.log("You have logged in");
+      response.json({ message: "" });
     } else {
-      console.log("password incorrect");
+      response.json({ message: "password incorrect" });
     }
   }
-
-  response.json("checked");
 });
 
 app.listen(8080, function () {
