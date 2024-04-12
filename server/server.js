@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+
 dotenv.config(); // allow us to use the environment variables (like the DATABASE_URL)
 const app = express();
 app.use(express.json());
@@ -26,10 +28,18 @@ app.post("/sign-up", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
 
-  await db.query(
-    "INSERT INTO username_password (username, password) VALUES ($1, $2)",
-    [username, password]
-  );
+  const saltRounds = 10;
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  try {
+    await db.query(
+      "INSERT INTO username_password (username, password) VALUES ($1, $2)",
+      [username, hashedPassword]
+    );
+  } catch (error) {
+    console.log("Username already exists");
+  }
 
   response.json("uploaded");
 });
@@ -43,10 +53,12 @@ app.post("/login", async function (request, response) {
     [username]
   );
 
+  const storedHashedPassword = result.rows[0].password;
+  const isMatch = await bcrypt.compare(password, storedHashedPassword);
   if (result.rows.length === 0) {
     console.log("no user exists");
   } else {
-    if (password === result.rows[0].password) {
+    if (isMatch) {
       console.log("You have logged in");
     } else {
       console.log("password incorrect");
