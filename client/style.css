@@ -19,7 +19,6 @@
   width: 10px;
   height: 10px;
   border: 1px solid black;
-  border-radius: 50%;
   background-color: red;
 }
 
@@ -27,4 +26,8 @@ li {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+#DataForm {
+  display: none;
 }
