@@ -39,3 +39,23 @@ li {
 #countryCode {
   width: 70px;
 }
+
+.data-container {
+  display: flex;
+  gap: 10rem;
+  flex-direction: column;
+}
+
+#organisation-select {
+  height: 25px;
+}
+
+.p-details {
+  display: flex;
+  gap: 2rem;
+}
+
+#p-detail-container {
+  display: flex;
+  flex-direction: column;
+}

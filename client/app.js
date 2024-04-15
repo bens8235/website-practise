@@ -9,6 +9,8 @@ const button2 = document.getElementById("login-btn-1"); //first login button
 const signUp = document.getElementById("signup-btn"); //second signup button
 const login = document.getElementById("login-btn"); //second login button
 const passwordRequirements = document.getElementById("password-requirements"); //password requirements
+const orgSelect = document.getElementById("organisation-select");
+const peopleContainer = document.getElementById("p-details-container");
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -232,3 +234,45 @@ form2.addEventListener("submit", async function (event) {
     }, 4000);
   }
 });
+
+async function getOrganisations() {
+  let peopleInfo = [];
+  const response = await fetch("http://localhost:8080/");
+  const orgs = await response.json();
+  const initialOption = document.createElement("option");
+  initialOption.innerHTML = "Please select an organisation";
+  orgSelect.appendChild(initialOption);
+  for (let org of orgs) {
+    const option = document.createElement("option");
+    option.innerHTML = org.organisation_name;
+    orgSelect.appendChild(option);
+  }
+  orgSelect.addEventListener("change", function (event) {
+    peopleInfo = [];
+    while (peopleContainer.firstChild) {
+      peopleContainer.removeChild(peopleContainer.firstChild);
+    }
+
+    const organisationSelected = event.target.value;
+    for (let org of orgs) {
+      if (org.organisation_name === organisationSelected) {
+        peopleInfo.push(org.people_details);
+      }
+    }
+
+    for (const people of peopleInfo) {
+      for (const p of people) {
+        const peopleDiv = document.createElement("div");
+        peopleDiv.classList.add("p-details");
+        peopleContainer.appendChild(peopleDiv);
+        for (const name in p) {
+          const peopleDetails = document.createElement("p");
+          peopleDetails.innerHTML = `${name} : ${p[name]}`;
+          peopleDiv.appendChild(peopleDetails);
+        }
+      }
+    }
+  });
+}
+
+getOrganisations();

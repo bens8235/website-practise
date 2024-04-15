@@ -14,16 +14,6 @@ const dbConnectionString = process.env.DATABASE_URL;
 
 const db = new pg.Pool({ connectionString: dbConnectionString });
 
-app.get("/", function (request, response) {
-  response.json("You are looking at my server");
-});
-
-// app.get("/employees", async function (request, response) {
-//   const result = await db.query(`SELECT * FROM employees`);
-
-//   response.json(result.rows);
-// });
-
 app.post("/sign-up", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
@@ -119,6 +109,31 @@ app.post("/data", async function (request, response) {
     response.json({ message: "" });
   } catch (error) {
     response.json({ message: "User already exists in database" });
+  }
+});
+
+app.get("/", async function (request, response) {
+  try {
+    const result = await db.query(`
+    SELECT 
+    o.organisation_name, 
+    json_agg(json_build_object('name', p.person_name, 'country_code', p.country_code, 'phone', p.phone, 'email', p.email, 'account', 
+    p.account_number, 'ethnicity', p.ethnicity)) 
+    AS people_details
+FROM 
+    organisations o
+JOIN 
+    organisation_people op ON o.organisationid = op.organisationid
+JOIN 
+    people p ON op.personid = p.personid
+GROUP BY 
+    o.organisation_name;
+
+      `);
+    response.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    response.status(500).json({ message: "Error fetching data from database" });
   }
 });
 
