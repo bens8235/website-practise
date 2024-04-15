@@ -14,22 +14,10 @@
     <button id="login-btn-1">Login</button>
     <div class="form-container">
       <form id="submit">
-        <label>Username: </label>
-        <input
-          type="text"
-          name="username"
-          placeholder="Type in a username"
-          required
-          id="username-check"
-        />
-        <label>Password: </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Type in a password"
-          required
-          id="password-check"
-        />
+        <label for="username-check">Username: </label>
+        <input type="text" name="username" required id="username-check" />
+        <label for="password-check">Password: </label>
+        <input type="password" name="password" required id="password-check" />
         <button type="submit" id="signup-btn">Sign Up</button>
         <button type="submit" id="login-btn">Login</button>
       </form>
@@ -59,22 +47,68 @@
       </ul>
     </div>
     <form id="data">
-      <label>Name: </label>
-      <input
-        type="text"
-        name="username"
-        placeholder="Type in a username"
-        required
-      />
-      <label>Organisation: </label>
-      <input
-        type="password"
-        name="password"
-        placeholder="Type in a password"
-        required
-      />
+      <label for="person">Person's Name: </label>
+      <input id="person" type="text" name="person" required /><br />
+
+      <label for="number">Phone Number: </label>
+      <input id="number" type="text" name="number" required /><br />
+
+      <label for="email">Email: </label>
+      <input id="email" type="email" name="email" required /><br />
+
+      <label for="account">Account Number: </label>
+      <input id="account" type="number" name="account" required /><br />
+
+      <label for="sort">Sort Code: </label>
+      <input id="sort" type="text" name="sort" required /><br />
+
+      <label for="ethnic-group">Choose an Ethnic Group:</label><br />
+      <select id="ethnic-group" name="ethnic-group">
+        <option value="">--Please choose an option--</option>
+        <optgroup label="White">
+          <option value="british">
+            English, Welsh, Scottish, Northern Irish or British
+          </option>
+          <option value="irish">Irish</option>
+          <option value="gypsy-irish-traveller">
+            Gypsy or Irish Traveller
+          </option>
+          <option value="roma">Roma</option>
+          <option value="any-other-white">Any other White background</option>
+        </optgroup>
+        <optgroup label="Mixed or multiple ethnic groups">
+          <option value="white-black-caribbean">
+            White and Black Caribbean
+          </option>
+          <option value="white-black-african">White and Black African</option>
+          <option value="white-asian">White and Asian</option>
+          <option value="any-other-mixed">
+            Any other Mixed or multiple ethnic background
+          </option>
+        </optgroup>
+        <optgroup label="Asian or Asian British">
+          <option value="indian">Indian</option>
+          <option value="pakistani">Pakistani</option>
+          <option value="bangladeshi">Bangladeshi</option>
+          <option value="chinese">Chinese</option>
+          <option value="any-other-asian">Any other Asian background</option>
+        </optgroup>
+        <optgroup label="Black, Black British, Caribbean or African">
+          <option value="african">African</option>
+          <option value="caribbean">Caribbean</option>
+          <option value="any-other-black">
+            Any other Black, Black British or Caribbean background
+          </option>
+        </optgroup>
+        <optgroup label="Other ethnic group">
+          <option value="arab">Arab</option>
+          <option value="any-other-ethnic-group">Any other ethnic group</option>
+        </optgroup></select
+      ><br />
+
       <button type="submit" id="signup-btn2">Submit</button>
     </form>
+
     <div id="alert"></div>
   </body>
 </html>
