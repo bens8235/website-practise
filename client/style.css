@@ -31,3 +31,11 @@ li {
 #DataForm {
   display: none;
 }
+
+.phone-number {
+  display: flex;
+}
+
+#countryCode {
+  width: 70px;
+}

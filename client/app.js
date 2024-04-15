@@ -196,3 +196,39 @@ form.addEventListener("submit", async function (event) {
     }
   }
 });
+
+form2.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(form2);
+  const formValues = Object.fromEntries(formData);
+
+  const response = await fetch("http://localhost:8080/data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formValues),
+  });
+  const json = await response.json();
+  const alerted = document.querySelector(".alert");
+  if (alerted) {
+    alerted.remove();
+  }
+  const alert = document.createElement("p");
+  alert.classList.add("alert");
+  alert.innerHTML = json.message;
+  alertDiv.appendChild(alert);
+  setTimeout(function () {
+    alert.remove();
+  }, 4000);
+  if (json.message == "") {
+    form2.reset();
+    const p = document.createElement("p");
+    p.innerHTML = "Form Submitted";
+    alertDiv.appendChild(p);
+    setTimeout(function () {
+      p.remove();
+    }, 4000);
+  }
+});
