@@ -9,8 +9,9 @@ const button2 = document.getElementById("login-btn-1"); //first login button
 const signUp = document.getElementById("signup-btn"); //second signup button
 const login = document.getElementById("login-btn"); //second login button
 const passwordRequirements = document.getElementById("password-requirements"); //password requirements
-const orgSelect = document.getElementById("organisation-select");
-const peopleContainer = document.getElementById("p-details-container");
+const orgSelect = document.getElementById("organisation-select"); //select for organisations to append options to
+const peopleContainer = document.getElementById("p-details-container"); //div to append data to
+const peopleData = document.getElementById("p-detail-container"); // to make appear once logged in
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -194,10 +195,14 @@ form.addEventListener("submit", async function (event) {
       form.style.display = "none";
       passwordRequirements.style.display = "none";
       form2.style.display = "block";
+      peopleData.style.display = "block";
+
       document.getElementById("DataForm").style.display = "block";
     }
   }
 });
+
+//form for submitting user data/organisations.
 
 form2.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -233,7 +238,15 @@ form2.addEventListener("submit", async function (event) {
       p.remove();
     }, 4000);
   }
+  while (orgSelect.firstChild) {
+    orgSelect.removeChild(orgSelect.firstChild);
+  }
+
+  getOrganisations();
 });
+
+//This gets all the organisations and people data from the database. Runs it once when program
+//first starts and then again when form is submitted to refresh data
 
 async function getOrganisations() {
   let peopleInfo = [];

@@ -14,6 +14,7 @@ const dbConnectionString = process.env.DATABASE_URL;
 
 const db = new pg.Pool({ connectionString: dbConnectionString });
 
+//end point to insert username & hashed password into database
 app.post("/sign-up", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
@@ -33,6 +34,7 @@ app.post("/sign-up", async function (request, response) {
   }
 });
 
+//endpoint to check if credentials correct to see if user can login
 app.post("/login", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
@@ -55,6 +57,7 @@ app.post("/login", async function (request, response) {
   }
 });
 
+//endpoint to insert people/organisation data in database
 app.post("/data", async function (request, response) {
   const person = request.body.person;
   const countryCode = request.body.countryCode;
@@ -112,6 +115,7 @@ app.post("/data", async function (request, response) {
   }
 });
 
+//endpoint to provide all organisations with people that work for them
 app.get("/", async function (request, response) {
   try {
     const result = await db.query(`
@@ -137,10 +141,12 @@ GROUP BY
   }
 });
 
+//test
 app.get("/data2", async function (request, response) {
   response.json({ message: "Hello Connor" });
 });
 
+//server running
 app.listen(8080, "0.0.0.0", function () {
   console.log(`Server is running on port 8080`);
 });
