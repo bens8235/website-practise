@@ -12,6 +12,8 @@ const passwordRequirements = document.getElementById("password-requirements"); /
 const orgSelect = document.getElementById("organisation-select"); //select for organisations to append options to
 const peopleContainer = document.getElementById("p-details-container"); //div to append data to
 const peopleData = document.getElementById("p-detail-container"); // to make appear once logged in
+const centerDiv = document.querySelector(".centerDiv"); //div in center of screen on signup/login
+const centerDivContainer = document.querySelector(".centerDivContainer");
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -193,9 +195,11 @@ form.addEventListener("submit", async function (event) {
     if (json.message === "") {
       form.reset();
       form.style.display = "none";
+      centerDivContainer.style.display = "block";
       passwordRequirements.style.display = "none";
       form2.style.display = "block";
       peopleData.style.display = "block";
+      centerDiv.style.display = "none";
 
       document.getElementById("DataForm").style.display = "block";
     }

@@ -49,12 +49,17 @@ li {
 
 .data-container {
   display: flex;
-  gap: 10rem;
-  flex-direction: column;
+  gap: 5rem;
 }
 
-#organisation-select {
-  height: 25px;
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: white; /* Change the color as needed */
 }
 
 .p-details {
@@ -68,29 +73,41 @@ li {
   display: none;
 }
 
-body {
-  height: 100vh;
+.centerDivContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    45deg,
-    rgba(43, 50, 78, 0.9) 0%,
-    /* Dark blue */ rgba(34, 40, 49, 0.9) 100% /* Very dark desaturated blue */
-  );
+  height: 100%;
+}
+
+body {
+  height: 100vh;
+  background-color: rgba(43, 50, 78, 0.9);
   font-family: "Courier New", Courier, monospace;
 }
 
-input[type="text"],
-input[type="password"] {
-  width: 100%;
+input,
+select {
+  width: 270px;
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #ccc;
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
   font-family: "Courier New", Courier, monospace;
+}
+
+option,
+optgroup {
+  background-color: #2b2e3c; /* Darker background for options */
+  color: #fff; /* White text for options */
+  padding: 5px; /* Padding for better text alignment */
+}
+
+input:focus,
+select:focus {
+  border-color: #4a6fa5; /* Focus color that matches the button color */
 }
 
 .buttonDiv {
@@ -135,4 +152,47 @@ h1 {
 #signup-btn-1,
 #login-btn-1 {
   margin-bottom: 2rem;
+}
+
+.form-inputs,
+.phone-number {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-inputs input,
+.phone-number input {
+  height: 40px; /* Example height, adjust as needed */
+  padding: 8px 12px; /* Padding inside the input field */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+.phone-number input {
+  width: 184px;
+}
+
+.form-inputs p,
+.phone-number p {
+  font-size: 16px;
+  color: red;
+  margin: 0; /* Removes default margin */
+  padding-top: 10px; /* Adds padding at the top to increase height without affecting the input field */
+  padding-bottom: 10px; /* Adds padding at the bottom to increase height */
+  line-height: normal; /* Adjust this value if needed to manage text line height */
+  vertical-align: top; /* Aligns the '*' to the top of the div if needed */
+}
+
+#data {
+  min-width: 300px;
+  padding: 2rem;
+  border-radius: 8px; /* A subtle border radius */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Enhanced box shadow for depth */
+}
+
+#alert {
+  position: absolute;
+  bottom: 4%;
+  left: 25.2%;
+  color: white;
 }
