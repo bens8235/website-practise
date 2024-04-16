@@ -9,10 +9,17 @@
 
 .form-container {
   display: flex;
+  margin-top: 2rem;
+  gap: 1rem;
 }
 
 #password-requirements {
   display: none;
+  margin: 0;
+}
+
+.password-requirements {
+  margin: 0;
 }
 
 .green-box {
@@ -59,4 +66,73 @@ li {
   display: flex;
   flex-direction: column;
   display: none;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    45deg,
+    rgba(43, 50, 78, 0.9) 0%,
+    /* Dark blue */ rgba(34, 40, 49, 0.9) 100% /* Very dark desaturated blue */
+  );
+  font-family: "Courier New", Courier, monospace;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.buttonDiv {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.centerDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 50%;
+  height: 80%;
+  margin: auto;
+  background-color: #2b2e3c; /* Dark gray-blue, matching the darker theme */
+  border-radius: 8px; /* A subtle border radius */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Enhanced box shadow for depth */
+  color: #cccccc; /* Light gray text for readability */
+}
+
+button {
+  background-color: #4a6fa5;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5%;
+}
+
+h1 {
+  color: #c0c2c9;
+  font-weight: 700;
+}
+
+.padlock {
+  width: 150px;
+  height: 150px;
+}
+
+#signup-btn-1,
+#login-btn-1 {
+  margin-bottom: 2rem;
 }

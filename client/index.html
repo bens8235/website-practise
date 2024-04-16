@@ -8,43 +8,58 @@
     <script src="app.js" defer></script>
   </head>
   <body>
-    <h1>The Data Collectors</h1>
-    <h2 id="DataForm">The Data Form</h2>
-    <button id="signup-btn-1">Sign Up</button>
-    <button id="login-btn-1">Login</button>
-    <div class="form-container">
-      <form id="submit">
-        <label for="username-check">Username: </label>
-        <input type="text" name="username" required id="username-check" />
-        <label for="password-check">Password: </label>
-        <input type="password" name="password" required id="password-check" />
-        <button type="submit" id="signup-btn">Sign Up</button>
-        <button type="submit" id="login-btn">Login</button>
-      </form>
+    <div class="centerDiv">
+      <h1>THE DATA COLLECTORS</h1>
+      <h2 id="DataForm">The Data Form</h2>
+      <div class="buttonDiv">
+        <button id="signup-btn-1">Sign Up</button>
+        <button id="login-btn-1">Login</button>
+      </div>
+      <img class="padlock" src="padlock.png" alt="padlock" />
+      <div class="form-container">
+        <form id="submit">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            id="username-check"
+          />
 
-      <ul id="password-requirements">
-        <h2>Password Requirements</h2>
+          <input
+            placeholder="Password"
+            type="password"
+            name="password"
+            required
+            id="password-check"
+          />
+          <button type="submit" id="signup-btn">Sign Up</button>
+          <button type="submit" id="login-btn">Login</button>
+        </form>
 
-        <li>
-          At least 8 characters
-          <div class="green-box"></div>
-        </li>
+        <ul id="password-requirements">
+          <h2 class="password-requirements">Password Requirements</h2>
 
-        <li>
-          At least 1 uppercase
-          <div class="green-box"></div>
-        </li>
+          <li>
+            At least 8 characters
+            <div class="green-box"></div>
+          </li>
 
-        <li>
-          At least 1 special symbol
-          <div class="green-box"></div>
-        </li>
+          <li>
+            At least 1 uppercase
+            <div class="green-box"></div>
+          </li>
 
-        <li>
-          At least 1 number
-          <div class="green-box"></div>
-        </li>
-      </ul>
+          <li>
+            At least 1 special symbol
+            <div class="green-box"></div>
+          </li>
+
+          <li>
+            At least 1 number
+            <div class="green-box"></div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="data-container">
       <form id="data">
