@@ -137,6 +137,10 @@ GROUP BY
   }
 });
 
-app.listen(8080, function () {
+app.get("/data2", async function (request, response) {
+  response.json({ message: "Hello Connor" });
+});
+
+app.listen(8080, "0.0.0.0", function () {
   console.log(`Server is running on port 8080`);
 });
