@@ -2,19 +2,21 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import pg from "pg";
 
-dotenv.config(); // allow us to use the environment variables (like the DATABASE_URL)
+// Connecting to database and setting up express server
+
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// connect to your database
-import pg from "pg";
 const dbConnectionString = process.env.DATABASE_URL;
 
 const db = new pg.Pool({ connectionString: dbConnectionString });
 
-//end point to insert username & hashed password into database
+// end point to insert username & hashed password into database
+
 app.post("/sign-up", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
@@ -34,7 +36,8 @@ app.post("/sign-up", async function (request, response) {
   }
 });
 
-//endpoint to check if credentials correct to see if user can login
+// endpoint to check if credentials correct to see if user can login
+
 app.post("/login", async function (request, response) {
   const username = request.body.username;
   const password = request.body.password;
@@ -57,7 +60,8 @@ app.post("/login", async function (request, response) {
   }
 });
 
-//endpoint to insert people/organisation data in database
+// endpoint to insert people/organisation data in database
+
 app.post("/data", async function (request, response) {
   const person = request.body.person;
   const countryCode = request.body.countryCode;
@@ -70,10 +74,14 @@ app.post("/data", async function (request, response) {
   const organisation3 = request.body.organisation3;
   const organisation4 = request.body.organisation4;
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-  };
+  const formatOrganizationName = (string) => {
+    let cleanedString = string.replace(/\'s/gi, "s").trim();
 
+    return (
+      cleanedString.charAt(0).toUpperCase() +
+      cleanedString.slice(1).toLowerCase()
+    );
+  };
   const organisations = [
     organisation1,
     organisation2,
@@ -81,7 +89,7 @@ app.post("/data", async function (request, response) {
     organisation4,
   ]
     .filter((org) => org && org.trim() !== "")
-    .map((org) => capitalizeFirstLetter(org.trim()));
+    .map((org) => formatOrganizationName(org.trim()));
 
   try {
     const peopleResult = await db.query(
@@ -115,13 +123,14 @@ app.post("/data", async function (request, response) {
   }
 });
 
-//endpoint to provide all organisations with people that work for them
+// endpoint to provide all organisations with people that work for them
+
 app.get("/", async function (request, response) {
   try {
     const result = await db.query(`
     SELECT 
     o.organisation_name, 
-    json_agg(json_build_object('name', p.person_name, 'country_code', p.country_code, 'phone', p.phone, 'email', p.email, 'account', 
+    json_agg(json_build_object('id', p.personid, 'name', p.person_name, 'country_code', p.country_code, 'phone', p.phone, 'email', p.email, 'account', 
     p.account_number, 'ethnicity', p.ethnicity)) 
     AS people_details
 FROM 
@@ -141,12 +150,31 @@ GROUP BY
   }
 });
 
-//test
+// end point to delete data from organisations
+
+app.post("/delete", async function (request, response) {
+  const id = request.body.id;
+  try {
+    const res = await db.query("DELETE FROM people WHERE personid = $1", [id]);
+    if (res.rowCount === 0) {
+      response.status(404).json({ message: "Entry not found" });
+    } else {
+      response.json({ message: "" });
+    }
+  } catch (error) {
+    console.error("Delete operation failed:", error);
+    response.status(500).json({ message: "Failed to delete the entry" });
+  }
+});
+
+// test
+
 app.get("/data2", async function (request, response) {
   response.json({ message: "Hello Connor" });
 });
 
-//server running
-app.listen(8080, "0.0.0.0", function () {
+// server running
+
+app.listen(8080, function () {
   console.log(`Server is running on port 8080`);
 });

@@ -1,32 +1,38 @@
+// Load in sounds
+
 const sound = new Audio("padlock.mp3");
 sound.preload = "auto";
 sound.load();
-const form = document.getElementById("submit"); //signup & login form
-const alertDiv = document.getElementById("alert"); //div containing alert message
-const form2 = document.getElementById("data"); //people & organisation form
-const passwordCheck = document.getElementById("password-check"); //password input
-const userCheck = document.getElementById("username-check"); //username input
-const greenBoxes = document.querySelectorAll(".green-box"); //validation boxes
-const button1 = document.getElementById("signup-btn-1"); //first signup button
-const button2 = document.getElementById("login-btn-1"); //first login button
-const signUp = document.getElementById("signup-btn"); //second signup button
-const login = document.getElementById("login-btn"); //second login button
-const passwordRequirements = document.getElementById("password-requirements"); //password requirements
-const orgSelect = document.getElementById("organisation-select"); //select for organisations to append options to
-const peopleContainer = document.getElementById("p-details-container"); //div to append data to
-const peopleData = document.getElementById("p-detail-container"); // to make appear once logged in
-const centerDiv = document.querySelector(".centerDiv"); //div in center of screen on signup/login
-const centerDivContainer = document.querySelector(".centerDivContainer");
-const padlockImg = document.querySelector(".padlock");
-const h1 = document.querySelector("h1");
-secondCenterDiv = document.querySelector(".centerDiv2");
-dataFormBtn = document.getElementById("data-form");
-orgDataBtn = document.getElementById("organisation-data");
-dataFormContainer = document.querySelector(".data-container");
-dataFormTitle = document.getElementById("data-form-title");
-imgDiv = document.querySelector(".img-div");
 
-//to check password meets symbol requirement
+// Defining variables to be used
+
+const form = document.getElementById("submit"); // signup & login form
+const alertDiv = document.getElementById("alert"); // div containing alert message
+const form2 = document.getElementById("data"); // people & organisation form
+const passwordCheck = document.getElementById("password-check"); // password input
+const userCheck = document.getElementById("username-check"); // username input
+const greenBoxes = document.querySelectorAll(".green-box"); // validation boxes
+const button1 = document.getElementById("signup-btn-1"); // first signup button
+const button2 = document.getElementById("login-btn-1"); // first login button
+const signUp = document.getElementById("signup-btn"); // second signup button
+const login = document.getElementById("login-btn"); // second login button
+const passwordRequirements = document.getElementById("password-requirements"); // password requirements
+const orgSelect = document.getElementById("organisation-select"); // select for organisations to append options to
+const peopleContainer = document.getElementById("p-details-container"); // div to append data to
+const peopleData = document.getElementById("p-detail-container"); // to make appear once logged in
+const centerDiv = document.querySelector(".centerDiv"); // div in center of screen on signup/login
+const centerDivContainer = document.querySelector(".centerDivContainer"); // div on second screen
+const padlockImg = document.querySelector(".padlock"); // first padlock image
+const h1 = document.querySelector("h1"); // h1 title
+secondCenterDiv = document.querySelector(".centerDiv2"); // second center div
+dataFormBtn = document.getElementById("data-form"); // button to show data form
+orgDataBtn = document.getElementById("organisation-data"); // button to show organisation data
+dataFormContainer = document.querySelector(".data-container"); // div containing data
+dataFormTitle = document.getElementById("data-form-title"); // titles on the organisation data
+imgDiv = document.querySelector(".img-div"); // div that new image gets appended to
+
+// to check password meets symbol requirement
+
 const symbolArray = [
   "!",
   "@",
@@ -61,21 +67,26 @@ const symbolArray = [
   "£",
 ];
 
-//to check password meets uppercase requirement
+// to check password meets uppercase requirement
+
 const uppercaseLetters = [];
 for (let i = 65; i <= 90; i++) {
   uppercaseLetters.push(String.fromCharCode(i));
 }
 
-//to check password meets number requirement
+// to check password meets number requirement
+
 const numbers = [];
 for (let i = 0; i <= 9; i++) {
   numbers.push(i.toString());
 }
-//boolean value to use in a function later to check if all password requirements met
+
+// boolean value to use in a function later to check if all password requirements met
+
 let allGreen = true;
 
-//function to check if password meets different requirements
+// function to check if password meets different requirements
+
 function passwordValidation(arr, index, event) {
   for (letter of event.target.value) {
     if (arr.includes(letter)) {
@@ -89,7 +100,8 @@ function passwordValidation(arr, index, event) {
   }
 }
 
-//makes signup form appear, will then check password input meets requirements
+// makes signup form appear, will then check password input meets requirements
+
 button1.addEventListener("click", function () {
   form.style.display = "block";
   button1.style.display = "none";
@@ -135,7 +147,7 @@ button1.addEventListener("click", function () {
   });
 });
 
-//makes login form appear
+// makes login form appear
 
 button2.addEventListener("click", function () {
   userCheck.addEventListener("input", function () {
@@ -156,7 +168,7 @@ button2.addEventListener("click", function () {
   signUp.style.display = "none";
 });
 
-/*submits login or sign up form. Login checks credentials meet the ones in database. 
+/* submits login or sign up form. Login checks credentials meet the ones in database. 
 signup creates new user in database. */
 
 form.addEventListener("submit", async function (event) {
@@ -165,14 +177,16 @@ form.addEventListener("submit", async function (event) {
   const formData = new FormData(form);
   const formValues = Object.fromEntries(formData);
 
-  //depending on which button is clicked will set server endpoint
+  // depending on which button is clicked will set server endpoint
+
   const buttonId = document.activeElement.id;
   const endpoint =
     buttonId === "signup-btn"
       ? "http://localhost:8080/sign-up"
       : "http://localhost:8080/login";
 
-  //if password requirements not all met on signup
+  // if password requirements not all met on signup
+
   if (!allGreen) {
     if (!document.querySelector("p.alert")) {
       const p = document.createElement("p");
@@ -181,9 +195,9 @@ form.addEventListener("submit", async function (event) {
       alertDiv.append(p);
     }
   }
-  //this happens either on login or on signup when password requirements met
-  //Depending on if login or signup will have different endpoint and on signup will add user to database
-  //On login will check database for valid user
+  // this happens either on login or on signup when password requirements met
+  // Depending on if login or signup will have different endpoint and on signup will add user to database
+  // On login will check database for valid user
   else {
     const response = await fetch(endpoint, {
       method: "POST",
@@ -224,7 +238,6 @@ form.addEventListener("submit", async function (event) {
         centerDivContainer.style.display = "flex";
         passwordRequirements.style.display = "none";
         form2.style.display = "flex";
-        // peopleData.style.display = "block";
         padlockImg.style.display = "none";
         centerDiv.style.display = "none";
         h1.style.display = "none";
@@ -234,7 +247,7 @@ form.addEventListener("submit", async function (event) {
   }
 });
 
-//form for submitting user data/organisations.
+// form for submitting user data/organisations.
 
 form2.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -279,8 +292,8 @@ form2.addEventListener("submit", async function (event) {
   getOrganisations();
 });
 
-//This gets all the organisations and people data from the database. Runs it once when program
-//first starts and then again when form is submitted to refresh data
+// This gets all the organisations and people data from the database. Runs it once when program
+// first starts and then again when form is submitted to refresh data
 
 async function getOrganisations() {
   let peopleInfo = [];
@@ -336,14 +349,47 @@ async function getOrganisations() {
         peopleDiv.classList.add("p-details");
         peopleContainer.appendChild(peopleDiv);
         for (const name in p) {
-          const peopleDetails = document.createElement("p");
-          peopleDetails.innerHTML = `${p[name]}`;
-          peopleDiv.appendChild(peopleDetails);
+          if (name !== "id") {
+            const peopleDetails = document.createElement("p");
+            peopleDetails.innerHTML = `${p[name]}`;
+            peopleDiv.appendChild(peopleDetails);
+          }
         }
+        const imgBin = document.createElement("img");
+        imgBin.src = "bin.png";
+        imgBin.alt = "bin";
+        imgBin.style.height = "40px";
+        imgBin.style.width = "35px";
+        imgBin.style.cursor = "pointer";
+        peopleDiv.appendChild(imgBin);
+
+        imgBin.addEventListener("click", async function () {
+          const confirmed = confirm(
+            "Are you sure you want to delete this entry?"
+          );
+          if (confirmed) {
+            const response = await fetch("http://localhost:8080/delete", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(p),
+            });
+            const json = await response.json();
+            if (json.message === "") {
+              const divToRemove = this.parentNode;
+              divToRemove.parentNode.removeChild(divToRemove);
+            } else {
+              alert("Failed to delete the entry: " + json.message);
+            }
+          }
+        });
       }
     }
   });
 }
+
+// This makes data form appear and org data disappear
 
 dataFormBtn.addEventListener("click", function () {
   dataFormBtn.style.border = "1px solid white";
@@ -355,6 +401,8 @@ dataFormBtn.addEventListener("click", function () {
   dataFormContainer.style.display = "block";
   secondCenterDiv.style.overflowY = "visible";
 });
+
+// This makes org data appear and form data disappear
 
 orgDataBtn.addEventListener("click", function () {
   dataFormBtn.style.border = "none";
@@ -369,5 +417,7 @@ orgDataBtn.addEventListener("click", function () {
   dataFormContainer.style.alignItems = "center";
   secondCenterDiv.style.overflowY = "auto";
 });
+
+// Runs getOrganisations on page load
 
 getOrganisations();
