@@ -228,8 +228,7 @@ h1 {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Enhanced box shadow for depth */
   color: #cccccc; /* Light gray text for readability */
   display: none;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto;
 }
 
 #signup-btn2 {
@@ -247,4 +246,39 @@ h1 {
 .required {
   position: absolute;
   right: 30%;
+}
+
+.button-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#data-form {
+  border: 1px solid white;
+}
+
+.p-details-title {
+  color: white;
+  font-weight: bolder;
+}
+
+.p-details > p:first-child {
+  width: 90px;
+}
+
+.p-details > p:nth-child(2) {
+  width: 70px;
+}
+
+.p-details > p:nth-child(3) {
+  width: 120px;
+}
+
+.p-details > p:nth-child(4) {
+  width: 200px;
+}
+
+.p-details > p:nth-child(5) {
+  width: 150px;
 }

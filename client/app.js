@@ -17,6 +17,10 @@ const centerDivContainer = document.querySelector(".centerDivContainer");
 const padlockImg = document.querySelector(".padlock");
 const h1 = document.querySelector("h1");
 secondCenterDiv = document.querySelector(".centerDiv2");
+dataFormBtn = document.getElementById("data-form");
+orgDataBtn = document.getElementById("organisation-data");
+dataFormContainer = document.querySelector(".data-container");
+dataFormTitle = document.getElementById("data-form-title");
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -195,7 +199,7 @@ form.addEventListener("submit", async function (event) {
     p.innerHTML = json.message;
     alertDiv.appendChild(p);
     if (p.innerHTML !== "Username already exists") {
-      alertDiv.style.left = "38.2%";
+      alertDiv.style.left = "45%";
       alertDiv.style.bottom = "10%";
     }
 
@@ -209,9 +213,7 @@ form.addEventListener("submit", async function (event) {
       padlockImg.style.display = "none";
       centerDiv.style.display = "none";
       h1.style.display = "none";
-      secondCenterDiv.style.display = "flex";
-
-      document.getElementById("DataForm").style.display = "block";
+      secondCenterDiv.style.display = "block";
     }
   }
 });
@@ -240,6 +242,7 @@ form2.addEventListener("submit", async function (event) {
   alert.classList.add("alert");
   alert.innerHTML = json.message;
   alertDiv.appendChild(alert);
+  alertDiv.style.left = "28%";
   setTimeout(function () {
     alert.remove();
   }, 4000);
@@ -248,6 +251,7 @@ form2.addEventListener("submit", async function (event) {
     const p = document.createElement("p");
     p.innerHTML = "Form Submitted";
     alertDiv.appendChild(p);
+    alertDiv.style.left = "28%";
     setTimeout(function () {
       p.remove();
     }, 4000);
@@ -268,6 +272,7 @@ async function getOrganisations() {
   const orgs = await response.json();
   const initialOption = document.createElement("option");
   initialOption.innerHTML = "Please select an organisation";
+  initialOption.value = "";
   orgSelect.appendChild(initialOption);
   for (let org of orgs) {
     const option = document.createElement("option");
@@ -280,11 +285,33 @@ async function getOrganisations() {
       peopleContainer.removeChild(peopleContainer.firstChild);
     }
 
+    if (event.target.value === "") {
+      return;
+    }
+
     const organisationSelected = event.target.value;
     for (let org of orgs) {
       if (org.organisation_name === organisationSelected) {
         peopleInfo.push(org.people_details);
       }
+    }
+
+    const titles = [
+      "Name",
+      "Country Code",
+      "Phone",
+      "Email",
+      "Account Number",
+      "Ethnicity",
+    ];
+    const peopleDiv = document.createElement("div");
+    peopleDiv.classList.add("p-details");
+    peopleDiv.classList.add("p-details-title");
+    peopleContainer.appendChild(peopleDiv);
+    for (let title of titles) {
+      const peopleDetails = document.createElement("p");
+      peopleDetails.innerHTML = title;
+      peopleDiv.appendChild(peopleDetails);
     }
 
     for (const people of peopleInfo) {
@@ -294,12 +321,37 @@ async function getOrganisations() {
         peopleContainer.appendChild(peopleDiv);
         for (const name in p) {
           const peopleDetails = document.createElement("p");
-          peopleDetails.innerHTML = `${name} : ${p[name]}`;
+          peopleDetails.innerHTML = `${p[name]}`;
           peopleDiv.appendChild(peopleDetails);
         }
       }
     }
   });
 }
+
+dataFormBtn.addEventListener("click", function () {
+  dataFormBtn.style.border = "1px solid white";
+  orgDataBtn.style.border = "none";
+  form2.style.display = "flex";
+  secondCenterDiv.style.width = "50%";
+  peopleData.style.display = "none";
+  dataFormTitle.style.display = "block";
+  dataFormContainer.style.display = "block";
+  secondCenterDiv.style.overflowY = "visible";
+});
+
+orgDataBtn.addEventListener("click", function () {
+  dataFormBtn.style.border = "none";
+  orgDataBtn.style.border = "1px solid white";
+  form2.style.display = "none";
+  dataFormTitle.style.display = "none";
+  peopleData.style.display = "block";
+  secondCenterDiv.style.width = "80%";
+  dataFormContainer.style.display = "flex";
+  dataFormContainer.style.flexDirection = "column";
+  dataFormContainer.style.justifyContent = "start";
+  dataFormContainer.style.alignItems = "center";
+  secondCenterDiv.style.overflowY = "auto";
+});
 
 getOrganisations();
