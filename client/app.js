@@ -216,12 +216,12 @@ form.addEventListener("submit", async function (event) {
         img.classList.add("padlock");
         padlockImg.style.display = "none";
         imgDiv.appendChild(img);
-      }, 200);
+      }, 300);
 
       setTimeout(function () {
         form.reset();
         form.style.display = "none";
-        centerDivContainer.style.display = "block";
+        centerDivContainer.style.display = "flex";
         passwordRequirements.style.display = "none";
         form2.style.display = "flex";
         // peopleData.style.display = "block";

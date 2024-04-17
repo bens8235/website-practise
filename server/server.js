@@ -45,14 +45,14 @@ app.post("/login", async function (request, response) {
   );
 
   if (result.rows.length === 0) {
-    response.json({ message: "No user exists" });
+    response.json({ message: "Username/Password Incorrect" });
   } else {
     const storedHashedPassword = result.rows[0].password;
     const isMatch = await bcrypt.compare(password, storedHashedPassword);
     if (isMatch) {
       response.json({ message: "" });
     } else {
-      response.json({ message: "password incorrect" });
+      response.json({ message: "Username/Password Incorrect" });
     }
   }
 });
