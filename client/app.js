@@ -14,6 +14,9 @@ const peopleContainer = document.getElementById("p-details-container"); //div to
 const peopleData = document.getElementById("p-detail-container"); // to make appear once logged in
 const centerDiv = document.querySelector(".centerDiv"); //div in center of screen on signup/login
 const centerDivContainer = document.querySelector(".centerDivContainer");
+const padlockImg = document.querySelector(".padlock");
+const h1 = document.querySelector("h1");
+secondCenterDiv = document.querySelector(".centerDiv2");
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -191,15 +194,22 @@ form.addEventListener("submit", async function (event) {
     p.classList.add("alert");
     p.innerHTML = json.message;
     alertDiv.appendChild(p);
+    if (p.innerHTML !== "Username already exists") {
+      alertDiv.style.left = "38.2%";
+      alertDiv.style.bottom = "10%";
+    }
 
     if (json.message === "") {
       form.reset();
       form.style.display = "none";
       centerDivContainer.style.display = "block";
       passwordRequirements.style.display = "none";
-      form2.style.display = "block";
-      peopleData.style.display = "block";
+      form2.style.display = "flex";
+      // peopleData.style.display = "block";
+      padlockImg.style.display = "none";
       centerDiv.style.display = "none";
+      h1.style.display = "none";
+      secondCenterDiv.style.display = "flex";
 
       document.getElementById("DataForm").style.display = "block";
     }
