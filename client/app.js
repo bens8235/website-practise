@@ -1,3 +1,6 @@
+const sound = new Audio("padlock.mp3");
+sound.preload = "auto";
+sound.load();
 const form = document.getElementById("submit"); //signup & login form
 const alertDiv = document.getElementById("alert"); //div containing alert message
 const form2 = document.getElementById("data"); //people & organisation form
@@ -21,6 +24,7 @@ dataFormBtn = document.getElementById("data-form");
 orgDataBtn = document.getElementById("organisation-data");
 dataFormContainer = document.querySelector(".data-container");
 dataFormTitle = document.getElementById("data-form-title");
+imgDiv = document.querySelector(".img-div");
 
 //to check password meets symbol requirement
 const symbolArray = [
@@ -204,16 +208,28 @@ form.addEventListener("submit", async function (event) {
     }
 
     if (json.message === "") {
-      form.reset();
-      form.style.display = "none";
-      centerDivContainer.style.display = "block";
-      passwordRequirements.style.display = "none";
-      form2.style.display = "flex";
-      // peopleData.style.display = "block";
-      padlockImg.style.display = "none";
-      centerDiv.style.display = "none";
-      h1.style.display = "none";
-      secondCenterDiv.style.display = "block";
+      sound.play();
+      setTimeout(function () {
+        const img = document.createElement("img");
+        img.src = "unlocked_padlock.png";
+        img.alt = "unlocked padlock";
+        img.classList.add("padlock");
+        padlockImg.style.display = "none";
+        imgDiv.appendChild(img);
+      }, 200);
+
+      setTimeout(function () {
+        form.reset();
+        form.style.display = "none";
+        centerDivContainer.style.display = "block";
+        passwordRequirements.style.display = "none";
+        form2.style.display = "flex";
+        // peopleData.style.display = "block";
+        padlockImg.style.display = "none";
+        centerDiv.style.display = "none";
+        h1.style.display = "none";
+        secondCenterDiv.style.display = "block";
+      }, 1000);
     }
   }
 });
