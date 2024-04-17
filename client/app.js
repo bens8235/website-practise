@@ -100,200 +100,14 @@ function passwordValidation(arr, index, event) {
   }
 }
 
-// makes signup form appear, will then check password input meets requirements
+function playSoundAndChangeImage(sound, callback) {
+  sound.onplay = () => {
+    callback();
+    sound.onplay = null; //
+  };
 
-button1.addEventListener("click", function () {
-  form.style.display = "block";
-  button1.style.display = "none";
-  button2.style.display = "none";
-  login.style.display = "none";
-  passwordRequirements.style.display = "block";
-  userCheck.addEventListener("input", function () {
-    const pAlert = document.querySelector("p.alert");
-    if (pAlert) {
-      pAlert.remove();
-    }
-  });
-  passwordCheck.addEventListener("input", function (event) {
-    const pAlert = document.querySelector("p.alert");
-    if (pAlert) {
-      pAlert.remove();
-    }
-    if (event.target.value.length >= 8) {
-      greenBoxes[0].style.backgroundColor = "green";
-      greenBoxes[0].style.borderRadius = "50%";
-    } else if (event.target.value.length === 0) {
-      for (box of greenBoxes) {
-        box.style.backgroundColor = "";
-        box.style.borderRadius = "0%";
-      }
-    } else {
-      greenBoxes[0].style.backgroundColor = "";
-      greenBoxes[0].style.borderRadius = "0%";
-    }
-
-    passwordValidation(uppercaseLetters, 1, event);
-    passwordValidation(symbolArray, 2, event);
-    passwordValidation(numbers, 3, event);
-
-    allGreen = true;
-
-    for (box of greenBoxes) {
-      if (box.style.backgroundColor !== "green") {
-        allGreen = false;
-        break;
-      }
-    }
-  });
-});
-
-// makes login form appear
-
-button2.addEventListener("click", function () {
-  userCheck.addEventListener("input", function () {
-    const pAlert = document.querySelector("p.alert");
-    if (pAlert) {
-      pAlert.remove();
-    }
-  });
-  passwordCheck.addEventListener("input", function () {
-    const pAlert = document.querySelector("p.alert");
-    if (pAlert) {
-      pAlert.remove();
-    }
-  });
-  form.style.display = "block";
-  button1.style.display = "none";
-  button2.style.display = "none";
-  signUp.style.display = "none";
-});
-
-/* submits login or sign up form. Login checks credentials meet the ones in database. 
-signup creates new user in database. */
-
-form.addEventListener("submit", async function (event) {
-  event.preventDefault();
-
-  const formData = new FormData(form);
-  const formValues = Object.fromEntries(formData);
-
-  // depending on which button is clicked will set server endpoint
-
-  const buttonId = document.activeElement.id;
-  const endpoint =
-    buttonId === "signup-btn"
-      ? "http://localhost:8080/sign-up"
-      : "http://localhost:8080/login";
-
-  // if password requirements not all met on signup
-
-  if (!allGreen) {
-    if (!document.querySelector("p.alert")) {
-      const p = document.createElement("p");
-      p.classList.add("alert");
-      p.innerHTML = "Password doesn't meet requirements";
-      alertDiv.append(p);
-    }
-  }
-  // this happens either on login or on signup when password requirements met
-  // Depending on if login or signup will have different endpoint and on signup will add user to database
-  // On login will check database for valid user
-  else {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValues),
-    });
-    const json = await response.json();
-    const alert = document.querySelector(".alert");
-    if (alert) {
-      alert.remove();
-    }
-
-    const p = document.createElement("p");
-    p.classList.add("alert");
-    p.innerHTML = json.message;
-    alertDiv.appendChild(p);
-    if (p.innerHTML !== "Username already exists") {
-      alertDiv.style.left = "45%";
-      alertDiv.style.bottom = "10%";
-    }
-
-    if (json.message === "") {
-      sound.play();
-      setTimeout(function () {
-        const img = document.createElement("img");
-        img.src = "unlocked_padlock.png";
-        img.alt = "unlocked padlock";
-        img.classList.add("padlock");
-        padlockImg.style.display = "none";
-        imgDiv.appendChild(img);
-      }, 300);
-
-      setTimeout(function () {
-        form.reset();
-        form.style.display = "none";
-        centerDivContainer.style.display = "flex";
-        passwordRequirements.style.display = "none";
-        form2.style.display = "flex";
-        padlockImg.style.display = "none";
-        centerDiv.style.display = "none";
-        h1.style.display = "none";
-        secondCenterDiv.style.display = "block";
-      }, 1000);
-    }
-  }
-});
-
-// form for submitting user data/organisations.
-
-form2.addEventListener("submit", async function (event) {
-  event.preventDefault();
-
-  const formData = new FormData(form2);
-  const formValues = Object.fromEntries(formData);
-
-  const response = await fetch("http://localhost:8080/data", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formValues),
-  });
-  const json = await response.json();
-  const alerted = document.querySelector(".alert");
-  if (alerted) {
-    alerted.remove();
-  }
-  const alert = document.createElement("p");
-  alert.classList.add("alert");
-  alert.innerHTML = json.message;
-  alertDiv.appendChild(alert);
-  alertDiv.style.left = "28%";
-  setTimeout(function () {
-    alert.remove();
-  }, 4000);
-  if (json.message == "") {
-    form2.reset();
-    const p = document.createElement("p");
-    p.innerHTML = "Form Submitted";
-    alertDiv.appendChild(p);
-    alertDiv.style.left = "28%";
-    setTimeout(function () {
-      p.remove();
-    }, 4000);
-  }
-  while (orgSelect.firstChild) {
-    orgSelect.removeChild(orgSelect.firstChild);
-  }
-
-  getOrganisations();
-});
-
-// This gets all the organisations and people data from the database. Runs it once when program
-// first starts and then again when form is submitted to refresh data
+  sound.play();
+}
 
 async function getOrganisations() {
   let peopleInfo = [];
@@ -420,6 +234,200 @@ async function getOrganisations() {
     }
   });
 }
+
+// makes signup form appear, will then check password input meets requirements
+
+button1.addEventListener("click", function () {
+  form.style.display = "block";
+  button1.style.display = "none";
+  button2.style.display = "none";
+  login.style.display = "none";
+  passwordRequirements.style.display = "block";
+  userCheck.addEventListener("input", function () {
+    const pAlert = document.querySelector("p.alert");
+    if (pAlert) {
+      pAlert.remove();
+    }
+  });
+  passwordCheck.addEventListener("input", function (event) {
+    const pAlert = document.querySelector("p.alert");
+    if (pAlert) {
+      pAlert.remove();
+    }
+    if (event.target.value.length >= 8) {
+      greenBoxes[0].style.backgroundColor = "green";
+      greenBoxes[0].style.borderRadius = "50%";
+    } else if (event.target.value.length === 0) {
+      for (box of greenBoxes) {
+        box.style.backgroundColor = "";
+        box.style.borderRadius = "0%";
+      }
+    } else {
+      greenBoxes[0].style.backgroundColor = "";
+      greenBoxes[0].style.borderRadius = "0%";
+    }
+
+    passwordValidation(uppercaseLetters, 1, event);
+    passwordValidation(symbolArray, 2, event);
+    passwordValidation(numbers, 3, event);
+
+    allGreen = true;
+
+    for (box of greenBoxes) {
+      if (box.style.backgroundColor !== "green") {
+        allGreen = false;
+        break;
+      }
+    }
+  });
+});
+
+// makes login form appear
+
+button2.addEventListener("click", function () {
+  userCheck.addEventListener("input", function () {
+    const pAlert = document.querySelector("p.alert");
+    if (pAlert) {
+      pAlert.remove();
+    }
+  });
+  passwordCheck.addEventListener("input", function () {
+    const pAlert = document.querySelector("p.alert");
+    if (pAlert) {
+      pAlert.remove();
+    }
+  });
+  form.style.display = "block";
+  button1.style.display = "none";
+  button2.style.display = "none";
+  signUp.style.display = "none";
+});
+
+/* submits login or sign up form. Login checks credentials meet the ones in database. 
+signup creates new user in database. */
+
+form.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(form);
+  const formValues = Object.fromEntries(formData);
+
+  // depending on which button is clicked will set server endpoint
+
+  const buttonId = document.activeElement.id;
+  const endpoint =
+    buttonId === "signup-btn"
+      ? "http://localhost:8080/sign-up"
+      : "http://localhost:8080/login";
+
+  // if password requirements not all met on signup
+
+  if (!allGreen) {
+    if (!document.querySelector("p.alert")) {
+      const p = document.createElement("p");
+      p.classList.add("alert");
+      p.innerHTML = "Password doesn't meet requirements";
+      alertDiv.append(p);
+    }
+  }
+  // this happens either on login or on signup when password requirements met
+  // Depending on if login or signup will have different endpoint and on signup will add user to database
+  // On login will check database for valid user
+  else {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formValues),
+    });
+    const json = await response.json();
+    const alert = document.querySelector(".alert");
+    if (alert) {
+      alert.remove();
+    }
+
+    const p = document.createElement("p");
+    p.classList.add("alert");
+    p.innerHTML = json.message;
+    alertDiv.appendChild(p);
+    if (p.innerHTML !== "Username already exists") {
+      alertDiv.style.left = "45%";
+      alertDiv.style.bottom = "10%";
+    }
+
+    if (json.message === "") {
+      playSoundAndChangeImage(sound, function () {
+        const img = document.createElement("img");
+        img.src = "unlocked_padlock.png";
+        img.alt = "unlocked padlock";
+        img.classList.add("padlock");
+        padlockImg.style.display = "none";
+        imgDiv.appendChild(img);
+
+        setTimeout(function () {
+          form.reset();
+          form.style.display = "none";
+          centerDivContainer.style.display = "flex";
+          passwordRequirements.style.display = "none";
+          form2.style.display = "flex";
+          padlockImg.style.display = "none";
+          centerDiv.style.display = "none";
+          h1.style.display = "none";
+          secondCenterDiv.style.display = "block";
+        }, 1000);
+      });
+    }
+  }
+});
+
+// form for submitting user data/organisations.
+
+form2.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(form2);
+  const formValues = Object.fromEntries(formData);
+
+  const response = await fetch("http://localhost:8080/data", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formValues),
+  });
+  const json = await response.json();
+  const alerted = document.querySelector(".alert");
+  if (alerted) {
+    alerted.remove();
+  }
+  const alert = document.createElement("p");
+  alert.classList.add("alert");
+  alert.innerHTML = json.message;
+  alertDiv.appendChild(alert);
+  alertDiv.style.left = "28%";
+  setTimeout(function () {
+    alert.remove();
+  }, 4000);
+  if (json.message == "") {
+    form2.reset();
+    const p = document.createElement("p");
+    p.innerHTML = "Form Submitted";
+    alertDiv.appendChild(p);
+    alertDiv.style.left = "28%";
+    setTimeout(function () {
+      p.remove();
+    }, 4000);
+  }
+  while (orgSelect.firstChild) {
+    orgSelect.removeChild(orgSelect.firstChild);
+  }
+
+  getOrganisations();
+});
+
+// This gets all the organisations and people data from the database. Runs it once when program
+// first starts and then again when form is submitted to refresh data
 
 // This makes data form appear and org data disappear
 
