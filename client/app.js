@@ -298,7 +298,7 @@ form2.addEventListener("submit", async function (event) {
 async function getOrganisations() {
   let peopleInfo = [];
   const response = await fetch("http://localhost:8080/");
-  const orgs = await response.json();
+  let orgs = await response.json();
   const initialOption = document.createElement("option");
   initialOption.innerHTML = "Please select an organisation";
   initialOption.value = "";
@@ -306,9 +306,12 @@ async function getOrganisations() {
   for (let org of orgs) {
     const option = document.createElement("option");
     option.innerHTML = org.organisation_name;
+    option.value = org.organisation_name;
     orgSelect.appendChild(option);
   }
-  orgSelect.addEventListener("change", function (event) {
+  orgSelect.addEventListener("change", async function (event) {
+    const r = await fetch("http://localhost:8080/");
+    orgs = await r.json();
     peopleInfo = [];
     while (peopleContainer.firstChild) {
       peopleContainer.removeChild(peopleContainer.firstChild);
@@ -362,8 +365,18 @@ async function getOrganisations() {
         imgBin.style.width = "35px";
         imgBin.style.cursor = "pointer";
         peopleDiv.appendChild(imgBin);
+        let temp = "";
 
+        if (peopleInfo[0].length === 1) {
+          temp = "delete";
+        }
         imgBin.addEventListener("click", async function () {
+          function getOrgIdByOrgName(targetValue) {
+            const org = orgs.find((o) => o.organisation_name === targetValue);
+            return org ? org.organisationid : null; // Returns the organisationid or null if no match is found
+          }
+          const orgId = getOrgIdByOrgName(event.target.value);
+
           const confirmed = confirm(
             "Are you sure you want to delete this entry?"
           );
@@ -373,12 +386,31 @@ async function getOrganisations() {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(p),
+              body: JSON.stringify({
+                data: p,
+                delete: temp,
+                org: event.target.value,
+                orgid: orgId,
+              }),
             });
             const json = await response.json();
             if (json.message === "") {
-              const divToRemove = this.parentNode;
-              divToRemove.parentNode.removeChild(divToRemove);
+              this.parentNode.remove();
+              // const divToRemove = this.parentNode;
+              // divToRemove.parentNode.removeChild(divToRemove);
+
+              if (json.orgDeleted === "yes") {
+                const orgOption = document.querySelector(
+                  `#organisation-select option[value="${json.orgName}"]`
+                );
+
+                if (orgOption) {
+                  orgOption.remove();
+                }
+                alert("Last member and organization deleted.");
+              } else {
+                alert("Member deleted.");
+              }
             } else {
               alert("Failed to delete the entry: " + json.message);
             }
@@ -400,6 +432,7 @@ dataFormBtn.addEventListener("click", function () {
   dataFormTitle.style.display = "block";
   dataFormContainer.style.display = "block";
   secondCenterDiv.style.overflowY = "visible";
+  peopleDiv.style.display = "none";
 });
 
 // This makes org data appear and form data disappear

@@ -130,6 +130,7 @@ app.get("/", async function (request, response) {
     const result = await db.query(`
     SELECT 
     o.organisation_name, 
+    o.organisationid,
     json_agg(json_build_object('id', p.personid, 'name', p.person_name, 'country_code', p.country_code, 'phone', p.phone, 'email', p.email, 'account', 
     p.account_number, 'ethnicity', p.ethnicity)) 
     AS people_details
@@ -140,7 +141,7 @@ JOIN
 JOIN 
     people p ON op.personid = p.personid
 GROUP BY 
-    o.organisation_name;
+    o.organisation_name, o.organisationid
 
       `);
     response.json(result.rows);
@@ -153,13 +154,37 @@ GROUP BY
 // end point to delete data from organisations
 
 app.post("/delete", async function (request, response) {
-  const id = request.body.id;
+  const deleteData = request.body.delete;
+  const id = request.body.data.id;
+  const orgid = request.body.orgid;
+  const org = request.body.org;
+  let orgDeleted = "";
+
   try {
-    const res = await db.query("DELETE FROM people WHERE personid = $1", [id]);
+    const linkCheck = await db.query(
+      "SELECT COUNT(*) AS count FROM organisation_people WHERE personid = $1",
+      [id]
+    );
+
+    const res = await db.query(
+      "DELETE FROM organisation_people WHERE personid = $1 AND organisationid = $2",
+      [id, orgid]
+    );
+
+    if (linkCheck.rows[0].count == 1) {
+      await db.query("DELETE FROM people WHERE personid = $1", [id]);
+    }
+
+    if (deleteData == "delete") {
+      orgDeleted = "yes";
+      await db.query("DELETE FROM organisations WHERE organisation_name = $1", [
+        org,
+      ]);
+    }
     if (res.rowCount === 0) {
       response.status(404).json({ message: "Entry not found" });
     } else {
-      response.json({ message: "" });
+      response.json({ message: "", orgDeleted: orgDeleted, orgName: org });
     }
   } catch (error) {
     console.error("Delete operation failed:", error);
