@@ -100,6 +100,8 @@ function passwordValidation(arr, index, event) {
   }
 }
 
+//function to keep sound and image change in sync
+
 function playSoundAndChangeImage(sound, callback) {
   sound.onplay = () => {
     callback();
@@ -108,6 +110,8 @@ function playSoundAndChangeImage(sound, callback) {
 
   sound.play();
 }
+
+//function to getOrgnaisatins and data
 
 async function getOrganisations() {
   let peopleInfo = [];
@@ -187,7 +191,7 @@ async function getOrganisations() {
         imgBin.addEventListener("click", async function () {
           function getOrgIdByOrgName(targetValue) {
             const org = orgs.find((o) => o.organisation_name === targetValue);
-            return org ? org.organisationid : null; // Returns the organisationid or null if no match is found
+            return org ? org.organisationid : null;
           }
           const orgId = getOrgIdByOrgName(event.target.value);
 
@@ -210,8 +214,6 @@ async function getOrganisations() {
             const json = await response.json();
             if (json.message === "") {
               this.parentNode.remove();
-              // const divToRemove = this.parentNode;
-              // divToRemove.parentNode.removeChild(divToRemove);
 
               if (json.orgDeleted === "yes") {
                 const orgOption = document.querySelector(
