@@ -317,6 +317,7 @@ form.addEventListener("submit", async function (event) {
   // depending on which button is clicked will set server endpoint
 
   const buttonId = document.activeElement.id;
+
   const endpoint =
     buttonId === "signup-btn"
       ? "http://localhost:8080/sign-up"
