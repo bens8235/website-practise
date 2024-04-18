@@ -115,7 +115,7 @@ function playSoundAndChangeImage(sound, callback) {
 
 async function getOrganisations() {
   let peopleInfo = [];
-  const response = await fetch("http://localhost:8080/");
+  const response = await fetch("https://website-practise-server.onrender.com");
   let orgs = await response.json();
   const initialOption = document.createElement("option");
   initialOption.innerHTML = "Please select an organisation";
@@ -128,7 +128,7 @@ async function getOrganisations() {
     orgSelect.appendChild(option);
   }
   orgSelect.addEventListener("change", async function (event) {
-    const r = await fetch("http://localhost:8080/");
+    const r = await fetch("https://website-practise-server.onrender.com");
     orgs = await r.json();
     peopleInfo = [];
     while (peopleContainer.firstChild) {
@@ -199,18 +199,21 @@ async function getOrganisations() {
             "Are you sure you want to delete this entry?"
           );
           if (confirmed) {
-            const response = await fetch("http://localhost:8080/delete", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                data: p,
-                delete: temp,
-                org: event.target.value,
-                orgid: orgId,
-              }),
-            });
+            const response = await fetch(
+              "https://website-practise-server.onrender.com/delete",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: p,
+                  delete: temp,
+                  org: event.target.value,
+                  orgid: orgId,
+                }),
+              }
+            );
             const json = await response.json();
             if (json.message === "") {
               this.parentNode.remove();
@@ -319,8 +322,8 @@ form.addEventListener("submit", async function (event) {
   const buttonId = document.activeElement.id;
   const endpoint =
     buttonId === "signup-btn"
-      ? "http://localhost:8080/sign-up"
-      : "http://localhost:8080/login";
+      ? "https://website-practise-server.onrender.com/sign-up"
+      : "https://website-practise-server.onrender.com/login";
 
   // if password requirements not all met on signup
 
@@ -391,13 +394,16 @@ form2.addEventListener("submit", async function (event) {
   const formData = new FormData(form2);
   const formValues = Object.fromEntries(formData);
 
-  const response = await fetch("http://localhost:8080/data", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formValues),
-  });
+  const response = await fetch(
+    "https://website-practise-server.onrender.com/data",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formValues),
+    }
+  );
   const json = await response.json();
   const alerted = document.querySelector(".alert");
   if (alerted) {
